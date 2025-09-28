@@ -1,0 +1,30 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "replaceMe"
+  },
+  {
+    "ParameterKey": "BucketName", 
+    "ParameterValue": "replaceMe"
+  },
+  {
+    "ParameterKey": "FinalEndpoint",
+    "ParameterValue": "replaceMe"
+  },
+  {
+    "ParameterKey": "ApplicationCode",
+    "ParameterValue": "replaceMe"
+  },
+  {
+    "ParameterKey": "SSLCertificateArn",
+    "ParameterValue": "replaceMe"
+  },
+  {
+    "ParameterKey": "App",
+    "ParameterValue": "replaceMe"
+  },
+  {
+    "ParameterKey": "Env",
+    "ParameterValue": "replaceMe"
+  }
+]

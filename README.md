@@ -28,9 +28,9 @@ Each example includes detailed documentation, deployment scripts, and real-world
 technical-architecture-examples/
 ├── aws/
 │   └── spa-deployment/          # Deploy SPA with S3 + CloudFront
-├── amazon-q-developer/
-│   ├── cli-setup/              # Amazon Q Developer CLI configuration
-│   └── context-management/     # Context and profiles setup
+│   └──amazon-q-developer/
+│       ├── cli-setup/              # Amazon Q Developer CLI configuration
+│       └── context-management/     # Context and profiles setup
 └── planned/
     ├── azure/                  # Azure examples (coming soon)
     ├── ovh/                    # OVH examples (coming soon)
@@ -85,9 +85,9 @@ Chaque exemple inclut une documentation détaillée, des scripts de déploiement
 technical-architecture-examples/
 ├── aws/
 │   └── spa-deployment/          # Déployer une SPA avec S3 + CloudFront
-├── amazon-q-developer/
-│   ├── cli-setup/              # Configuration Amazon Q Developer CLI
-│   └── context-management/     # Configuration contextes et profils
+│   └──amazon-q-developer/
+│       ├── cli-setup/              # Amazon Q Developer CLI configuration
+│       └── context-management/     # Context and profiles setup
 └── planned/
     ├── azure/                  # Exemples Azure (à venir)
     ├── ovh/                    # Exemples OVH (à venir)

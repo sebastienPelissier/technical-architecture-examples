@@ -1,38 +1,64 @@
 {
-  "Version": "2012-10-17",
+// Ce fichier est à usage pédagogique uniquement. //ne sont pas valides dans AWS IAM.,
+"Version": "2012-10-17",
   "Statement": [
     {
+      // Toujours nommer les Sid ca permet d'Identifier rapidement une règle dans les logs CloudTrail
+      // ca permet aussi de Documenter l'intention de la règle
+      // La facilite le debug  des problèmes de permissions
+      // Utilise des noms descriptifs en PascalCase (ex: `AllowCoreServices`, `DenyExpensiveCompute`)
+      "Sid": "AllowCoreServices",
       "Effect": "Allow",
       "Action": [
-        "s3:*",
-        "cloudfront:*",
-        "cloudformation:*",
-        "acm:*",
-        "route53:*",
-        "iam:GetRole",
-        "iam:PassRole"
+        "s3:*",              // Toutes les actions S3 (stockage de fichiers)
+        "cloudfront:*",     // Toutes les actions CloudFront (CDN)
+        "cloudformation:*", // Toutes les actions CloudFormation (IaC)
+        "acm:*"            // Toutes les actions ACM (certificats SSL)
       ],
-      "Resource": "*"
+      "Resource": "*",
+      "Comment": "Autorise les services essentiels pour déployer une application web statique"
     },
     {
+      "Sid": "AllowIAMForCloudFormation",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetRole",   // Permet de lire les informations d'un rôle IAM
+        "iam:PassRole"   // Permet de passer un rôle à un service AWS (requis pour CloudFormation)
+      ],
+      "Resource": [
+        "arn:aws:iam::*:role/CloudFormation*",      // Rôles commençant par CloudFormation
+        "arn:aws:iam::*:role/service-role/*"        // Rôles de service AWS
+      ],
+      "Comment": "Permissions IAM minimales pour que CloudFormation puisse créer des ressources"
+    },
+    {
+      "Sid": "DenyExpensiveCompute",
       "Effect": "Deny",
       "Action": [
-        "ec2:*",
-        "rds:*",
-        "lambda:*"
+        "ec2:RunInstances",           // Bloque le lancement d'instances EC2
+        "ec2:StartInstances",         // Bloque le démarrage d'instances EC2
+        "rds:CreateDBInstance",       // Bloque la création de bases de données RDS
+        "lambda:CreateFunction",      // Bloque la création de fonctions Lambda
+        "lambda:UpdateFunctionCode"   // Bloque la mise à jour du code Lambda
       ],
-      "Resource": "*"
+      "Resource": "*",
+      "Comment": "Bloque les services coûteux pour éviter les surprises de facturation"
     },
     {
+      "Sid": "RestrictToRegions",
       "Effect": "Deny",
       "Action": "*",
       "Resource": "*",
       "Condition": {
         "StringNotEquals": {
           "aws:RequestedRegion": ["eu-west-1", "us-east-1"]
+        },
+        "ForAllValues:StringNotEquals": {
+          "aws:RequestedRegion": ["eu-west-1", "us-east-1"]
         }
-      }
+      },
+      "Comment": "Limite l'accès aux régions eu-west-1 (Irlande) et us-east-1 (Virginie). us-east-1 est nécessaire pour les certificats SSL CloudFront"
     }
-  ]
+  ],
+  "Description": "Policy personnalisée pour développement local avec IAM Identity Center. Principe du moindre privilège : autorise uniquement les services essentiels (S3, CloudFront, ACM, CloudFormation) et bloque les services coûteux (EC2, RDS, Lambda). Limite géographique à 2 régions pour contrôler les coûts."
 }
-

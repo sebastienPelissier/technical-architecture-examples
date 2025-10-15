@@ -1,0 +1,55 @@
+services:
+  php:
+    image: php:8.4-fpm-alpine
+    container_name: symfony-app
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    environment:
+      - APP_ENV=dev
+      - DATABASE_URL=postgresql://symfony:symfony@postgres:5432/symfony_db?serverVersion=16&charset=utf8
+    networks:
+      - symfony-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:alpine
+    container_name: symfony-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - symfony-network
+    depends_on:
+      - php
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: symfony-db
+    environment:
+      - POSTGRES_DB=symfony_db
+      - POSTGRES_USER=symfony
+      - POSTGRES_PASSWORD=symfony
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - symfony-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U symfony"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  symfony-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local

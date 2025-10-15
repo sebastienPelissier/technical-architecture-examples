@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
+  "name": "{{AGENT_NAME}}",
+  "description": "{{AGENT_DESCRIPTION}}",
+  "prompt": "{{AGENT_PROMPT}}\n\nYour expertise covers:\n- {{TECH_STACK_1}}\n- {{TECH_STACK_2}}\n- {{TECH_STACK_3}}\n\nWhen helping:\n- {{INSTRUCTION_1}}\n- {{INSTRUCTION_2}}\n- {{INSTRUCTION_3}}",
+  "mcpServers": {},
+  "tools": ["*"],
+  "toolAliases": {},
+  "resources": [
+    "file://.amazonq/rules/**/*.md",
+    "file://examples/**/*.yml",
+    "file://README.md",
+    "file://package.json",
+    "file://composer.json"
+  ],
+  "hooks": {
+    "userPromptSubmit": [{"command": "pwd"}],
+    "agentSpawn": [
+      {"command": "git branch --show-current"},
+      {"command": "git status"}
+    ]
+  },
+  "toolsSettings": {},
+  "useLegacyMcpJson": false,
+  "model": "claude-sonnet-4.5"
+}

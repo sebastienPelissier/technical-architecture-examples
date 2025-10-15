@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda function with Bedrock access
+
+Parameters:
+  FunctionName:
+    Type: String
+    Description: Name of the Lambda function
+
+  ModelId:
+    Type: String
+    Default: anthropic.claude-3-sonnet-20240229-v1:0
+    Description: Bedrock model ID
+
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: BedrockInvokePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                  - bedrock:InvokeModelWithResponseStream
+                Resource: !Sub 'arn:aws:bedrock:${AWS::Region}::foundation-model/${ModelId}'
+
+  BedrockLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Ref FunctionName
+      Runtime: nodejs24.x
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          MODEL_ID: !Ref ModelId
+          LOG_LEVEL: INFO
+      Code:
+        ZipFile: |
+          exports.handler = async (event) => {
+            // Lambda code here
+            return { statusCode: 200, body: 'OK' };
+          };
+      Tags:
+        - Key: ManagedBy
+          Value: CloudFormation
+
+Outputs:
+  FunctionArn:
+    Description: Lambda function ARN
+    Value: !GetAtt BedrockLambda.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-FunctionArn'
+
+  RoleArn:
+    Description: Lambda execution role ARN
+    Value: !GetAtt LambdaExecutionRole.Arn

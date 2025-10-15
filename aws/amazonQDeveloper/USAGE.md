@@ -27,11 +27,6 @@ Generate a CloudFormation template for an S3 bucket following our security guide
 Review this Lambda function for security issues based on our guidelines
 ```
 
-### Blog Article
-```
-Write a technical article about implementing Bedrock with Lambda, include code examples
-```
-
 ### Infrastructure
 ```
 Create a Docker Compose setup for a Node.js app with Redis following our conventions

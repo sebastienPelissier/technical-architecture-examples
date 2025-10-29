@@ -103,10 +103,6 @@ Resources:
             - GET
             - HEAD
             - OPTIONS
-          CachedMethods:
-            - GET
-            - HEAD
-            - OPTIONS
         ViewerCertificate:
           AcmCertificateArn: !Ref SSLCertificateArn
           SslSupportMethod: sni-only
@@ -118,7 +114,7 @@ Resources:
             ResponseCode: 200
             ResponsePagePath: /index.html
             ErrorCachingMinTTL: 300 # réduit le nombre de requêtes générées au bucket s3
-          #S3 avec OAC retourne 403 quand un objet n'existe pas (pas 404
+          #S3 avec Origin Access Control retourne 403 quand un objet n'existe pas (pas 404
           - ErrorCode: 404
             ResponseCode: 200
             ResponsePagePath: /index.html

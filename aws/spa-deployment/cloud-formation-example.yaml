@@ -21,14 +21,6 @@ Parameters:
       - PriceClass_200
       - PriceClass_All
 
-  EnableLogging:
-    Type: String
-    Description: Activer la journalisation CloudFront (génère des coûts supplémentaires)
-    Default: "false"
-    AllowedValues:
-      - "true"
-      - "false"
-
   FinalEndpoint:
     Description: Final application domain name. Will also be passed to lambdas for platform endpoint
     Type: String
@@ -57,8 +49,6 @@ Parameters:
     Description: Environnement pour le tagging (dev, staging, prod)
     Default: prod
 
-Conditions:
-  EnableLoggingCondition: !Equals [!Ref EnableLogging, "true"]
 Resources:
   #############################################
   #### CLOUDFRONT
@@ -102,7 +92,6 @@ Resources:
           AllowedMethods:
             - GET
             - HEAD
-            - OPTIONS
         ViewerCertificate:
           AcmCertificateArn: !Ref SSLCertificateArn
           SslSupportMethod: sni-only
@@ -114,19 +103,11 @@ Resources:
             ResponseCode: 200
             ResponsePagePath: /index.html
             ErrorCachingMinTTL: 300 # réduit le nombre de requêtes générées au bucket s3
-          #S3 avec Origin Access Control retourne 403 quand un objet n'existe pas (pas 404
+          #S3 avec Origin Access Control retourne 403 quand un objet n'existe pas (pas 404)
           - ErrorCode: 404
             ResponseCode: 200
             ResponsePagePath: /index.html
             ErrorCachingMinTTL: 300
-
-        # Optimisation des coûts : Désactiver la journalisation par défaut
-        Logging: !If
-          - EnableLoggingCondition
-          - Bucket: !GetAtt WebsiteBucket.DomainName
-            Prefix: "cf-logs/"
-            IncludeCookies: false
-          - !Ref AWS::NoValue
 
   # Origin Access Control pour CloudFront (remplace OAI)
   #https://docs.aws.amazon.com/fr_fr/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html

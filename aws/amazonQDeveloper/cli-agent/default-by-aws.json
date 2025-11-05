@@ -1,0 +1,43 @@
+{
+  "name": "default",
+  "description": "This is an agent migrated from profile context",
+  "prompt": null,
+  "mcpServers": {},
+  "tools": [
+    "*"
+  ],
+  "toolAliases": {},
+  "allowedTools": [
+    "fs_read"
+  ],
+  "resources": [
+    "file://.amazonq/rules/coding-project.md",
+    "file://.amazon-q/context/global/coding-standards.md"
+  ],
+  "hooks": {
+    "agentSpawn": [
+      {
+        "command": "echo 'Project: '$(basename $(pwd))",
+        "timeout_ms": 30000,
+        "max_output_size": 10240,
+        "cache_ttl_seconds": 0
+      },
+      {
+        "command": "echo 'Vérification de sécurité: fichiers sensibles exclus'",
+        "timeout_ms": 30000,
+        "max_output_size": 10240,
+        "cache_ttl_seconds": 0
+      }
+    ],
+    "userPromptSubmit": [
+      {
+        "command": "git status --short",
+        "timeout_ms": 30000,
+        "max_output_size": 10240,
+        "cache_ttl_seconds": 0
+      }
+    ]
+  },
+  "toolsSettings": {},
+  "useLegacyMcpJson": true
+}

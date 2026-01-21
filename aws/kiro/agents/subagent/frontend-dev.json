@@ -1,0 +1,5 @@
+{
+  "name": "frontend-dev",
+  "description": "Expert frontend - HTML, CSS, JavaScript, UI/UX",
+  "tools": ["fs_read", "fs_write", "code", "execute_bash", "web_search"]
+}

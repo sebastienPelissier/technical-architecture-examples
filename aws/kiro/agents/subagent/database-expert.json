@@ -1,0 +1,5 @@
+{
+  "name": "database-expert",
+  "description": "Expert base de données - SQLite, PostgreSQL, schémas, migrations",
+  "tools": ["fs_read", "fs_write", "code", "execute_bash"]
+}

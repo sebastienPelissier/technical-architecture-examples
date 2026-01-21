@@ -1,0 +1,10 @@
+{
+  "name": "devops-aws",
+  "description": "Expert DevOps AWS - Lambda, API Gateway, S3, RDS, CloudFormation, déploiement",
+  "tools": ["fs_read", "fs_write", "use_aws", "execute_bash", "web_search"],
+  "toolsSettings": {
+    "use_aws": {
+      "autoAllowReadonly": true
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "name": "backend-dev",
+  "description": "Expert backend - Node.js, Express, API REST",
+  "tools": ["fs_read", "fs_write", "code", "execute_bash", "web_search"]
+}

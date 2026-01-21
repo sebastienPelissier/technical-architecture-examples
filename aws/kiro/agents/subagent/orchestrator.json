@@ -1,0 +1,21 @@
+{
+  "name": "orchestrator",
+  "description": "Formateur Kiro CLI - guide pédagogique et coordonne les experts",
+  "tools": [
+    "fs_read",
+    "fs_write",
+    "code",
+    "web_search",
+    "use_subagent"
+  ],
+  "toolsSettings": {
+    "subagent": {
+      "allowedAgents": [
+        "frontend-dev",
+        "backend-dev",
+        "database-expert",
+        "devops-aws"
+      ]
+    }
+  }
+}

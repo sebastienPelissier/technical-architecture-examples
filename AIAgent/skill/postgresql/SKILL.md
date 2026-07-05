@@ -1,6 +1,11 @@
 ---
 name: postgresql
 description: PostgreSQL database development and management. Use when designing database schemas, writing SQL queries, integrating PostgreSQL with Node.js applications, creating migrations, or working with PostgreSQL features (JSONB, full-text search, triggers, indexes). Covers schema design, query patterns, Node.js pg library integration, and best practices.
+keywords: ["database", "postgres", "storage", "backend","sql"]
+license: Apache-2.0
+metadata:
+  author: "sebastien pelissier"
+  version: "1.0"
 ---
 
 # PostgreSQL
@@ -15,9 +20,9 @@ Design tables, constraints, indexes, and triggers:
 
 ```sql
 CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  email VARCHAR(255) UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+                       email VARCHAR(255) UNIQUE NOT NULL,
+                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -32,9 +37,9 @@ Write efficient queries with PostgreSQL features:
 ```sql
 -- CTE with window functions
 WITH recent_users AS (
-  SELECT *, ROW_NUMBER() OVER (ORDER BY created_at DESC) as rn
-  FROM users WHERE created_at > NOW() - INTERVAL '7 days'
-)
+    SELECT *, ROW_NUMBER() OVER (ORDER BY created_at DESC) as rn
+    FROM users WHERE created_at > NOW() - INTERVAL '7 days'
+    )
 SELECT * FROM recent_users WHERE rn <= 10;
 ```
 

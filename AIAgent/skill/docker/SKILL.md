@@ -1,6 +1,11 @@
 ---
 name: docker
 description: Docker and Docker Compose v2 containerization for any application. Use when containerizing applications, creating multi-service setups, configuring databases with Docker, or working with Docker Compose. Supports Node.js, Python, Go, and other languages with multi-stage Dockerfile patterns, compose configurations, volume management, networking, and healthchecks.
+keywords: ["docker", "dockerfile", "docker-compose"]
+license: Apache-2.0
+metadata:
+  author: "sebastien pelissier"
+  version: "1.0"
 ---
 
 # Docker Compose
@@ -74,7 +79,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-  
+
   db:
     image: postgres:18-alpine
     healthcheck:

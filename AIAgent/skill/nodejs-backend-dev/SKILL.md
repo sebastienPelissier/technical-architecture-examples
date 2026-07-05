@@ -1,6 +1,11 @@
 ---
 name: nodejs-backend-dev
 description: Specialized Node.js backend development agent for building REST APIs and CLI applications using Node.js 24+. Use when building Express REST APIs, creating CLI tools, implementing backend services, or working with modern Node.js features (ES modules, built-in test runner, watch mode, parseArgs). Focuses on minimal, production-ready code patterns for API routes, controllers, middleware, error handling, and command-line interfaces. For Docker containerization, use the docker-compose skill.
+keywords: ["nodejs", "backend"]
+license: Apache-2.0
+metadata:
+  author: "sebastien pelissier"
+  version: "1.0"
 ---
 
 # Node.js Backend Developer
@@ -34,10 +39,10 @@ Build command-line tools using Node.js 24+ built-in features:
 import { parseArgs } from 'node:util';
 
 const { values, positionals } = parseArgs({
-  options: {
-    port: { type: 'string', short: 'p', default: '3000' }
-  },
-  allowPositionals: true
+    options: {
+        port: { type: 'string', short: 'p', default: '3000' }
+    },
+    allowPositionals: true
 });
 ```
 

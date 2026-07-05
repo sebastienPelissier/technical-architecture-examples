@@ -1,0 +1,55 @@
+# Dockerfile.jadx
+#
+# Build:   docker build -t local/jadx -f Dockerfile.jadx .
+# Upgrade: docker build --build-arg JADX_VERSION=x.y.z --build-arg JADX_SHA256=<hash> -t local/jadx -f Dockerfile.jadx .
+#
+# Latest jadx release: https://github.com/skylot/jadx/releases/latest
+# SHA256 digest: listed on the release page under the jadx-x.y.z.zip asset
+#
+# ── JDK base image options ────────────────────────────────────────────────────
+# Two production-grade, TCK-certified OpenJDK distributions:
+#
+#   eclipse-temurin:17-jre-jammy   — Eclipse Adoptium (Eclipse Foundation)
+#                                    Backed by Microsoft, Red Hat, IBM, Google
+#                                    https://adoptium.net
+#
+#   amazoncorretto:17              — Amazon Corretto
+#                                    LTS patches, AWS-production tested
+#                                    https://aws.amazon.com/corretto
+#
+# Switch with: --build-arg BASE_IMAGE=amazoncorretto:17
+# Note: Corretto uses yum; wget/unzip are pre-installed, no extra step needed.
+# ─────────────────────────────────────────────────────────────────────────────
+
+ARG BASE_IMAGE=eclipse-temurin:17-jre-jammy
+FROM ${BASE_IMAGE}
+
+ARG JADX_VERSION=1.5.5
+# SHA256 of jadx-${JADX_VERSION}.zip — update when bumping JADX_VERSION
+# Source: https://github.com/skylot/jadx/releases/download/v${JADX_VERSION}/jadx-${JADX_VERSION}.zip
+ARG JADX_SHA256=38a5766d3c8170c41566b4b13ea0ede2430e3008421af4927235c2880234d51a
+
+LABEL org.opencontainers.image.title="jadx" \
+      org.opencontainers.image.version="${JADX_VERSION}" \
+      org.opencontainers.image.source="https://github.com/skylot/jadx"
+
+# Install wget + unzip — apt-get for Temurin/Debian, yum for Corretto/Amazon Linux
+# amazoncorretto:17 includes wget and unzip by default, so the yum path is a no-op safety net
+RUN if command -v apt-get > /dev/null 2>&1; then \
+        apt-get update && apt-get install -y --no-install-recommends wget unzip \
+        && rm -rf /var/lib/apt/lists/*; \
+    elif command -v yum > /dev/null 2>&1; then \
+        yum install -y wget unzip && yum clean all; \
+    fi
+
+RUN wget -q "https://github.com/skylot/jadx/releases/download/v${JADX_VERSION}/jadx-${JADX_VERSION}.zip" \
+        -O /tmp/jadx.zip \
+    && echo "${JADX_SHA256}  /tmp/jadx.zip" | sha256sum -c - \
+    && unzip -q /tmp/jadx.zip -d /jadx \
+    && rm /tmp/jadx.zip \
+    && chmod +x /jadx/bin/jadx
+
+WORKDIR /workspace
+
+ENTRYPOINT ["/jadx/bin/jadx"]
+CMD ["--help"]
